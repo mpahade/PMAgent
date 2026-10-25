@@ -1,5 +1,7 @@
 # PM Sprint Status Agent
 
+> Design and approach: see [APPROACH.md](APPROACH.md).
+
 A project-management agent that reviews weekly Jira snapshots and produces a weekly sprint status report: RAG status, sprint health, risk flags with recommended actions, blockers, stuck items, trends and asks.
 
 The data is **synthetic**: a demo project, "Atlas - Mobile Onboarding v2", with 23 issues across three 2-week sprints and six weekly snapshots (Sep 18 – Oct 23, 2026). People, vendors and PR numbers are fictional.
