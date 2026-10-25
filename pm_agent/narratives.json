@@ -1,0 +1,120 @@
+{
+ "2026-09-18": {
+  "headline": "Sprint 40 is mid-way with little closed yet, but nothing is blocked.",
+  "summary": [
+   "2 of 34 points are done (6%) at the sprint midpoint. Five stories are in progress and should land next week.",
+   "The Android 12 rotation crash (ATL-109) was hotfixed in 1.14.2.",
+   "No blockers. The main schedule risk is ATL-101: the Apple sign-in half needs an Apple entitlement that can take days to approve."
+  ],
+  "actions": {
+   "Burndown": "Check in at Monday stand-up on what will close by Friday; flag anything that will not.",
+   "ATL-101": "Submit the Sign in with Apple entitlement request now so Apple review does not gate the sprint."
+  },
+  "asks": [
+   "Lena: confirm the Apple entitlement request for ATL-101 is submitted by Mon Sep 21."
+  ]
+ },
+ "2026-09-25": {
+  "headline": "Sprint 40 closed at 53% (18 of 34 pts). Three items carry into Sprint 41.",
+  "summary": [
+   "Delivered: onboarding design v2, both welcome carousels, account creation API v2 and the Android crash fix.",
+   "Carrying over 16 pts: ATL-101 social sign-in (Apple half), ATL-106 email verification (in review) and ATL-107 analytics (not started).",
+   "Sprint 41 is planned at 50 pts against an 18-pt first-sprint velocity. That plan is very likely to slip."
+  ],
+  "actions": {
+   "Burndown": "Review why 3 items slipped in the retro; size Sprint 41 against 18-20 pts.",
+   "Scope creep": "Hold mid-sprint adds to bugs only."
+  },
+  "asks": [
+   "Product (Maya): trim Sprint 41 from 50 pts to about 30 at planning on Mon Sep 28.",
+   "Procurement: start the VeriID contract now; ATL-108 KYC needs sandbox keys in Sprint 41."
+  ]
+ },
+ "2026-10-02": {
+  "headline": "Sprint 41 has two blockers, including the release-critical KYC integration.",
+  "summary": [
+   "5 of 50 points done (10%) at the sprint midpoint. The 50-pt commitment is 2.8x the 18-pt average velocity.",
+   "New blocker ATL-108 (KYC, Highest): no VeriID sandbox keys until Procurement signs the vendor contract.",
+   "New blocker ATL-101: Apple has not yet approved the Sign in with Apple entitlement for the production bundle.",
+   "ATL-106 email verification is done; ATL-107 analytics has started after carrying over."
+  ],
+  "actions": {
+   "ATL-108": "Procurement to give a contract signature date by Tue Oct 6; Lena to build against mocked VeriID responses meanwhile.",
+   "ATL-101": "Follow up with Apple developer support; ship Google sign-in independently if Apple slips past Oct 9.",
+   "Over-commitment": "Agree now which ~25 pts will not make it, so the slip is planned rather than discovered.",
+   "Burndown": "Daily burndown check until the blockers clear."
+  },
+  "asks": [
+   "Procurement: VeriID contract signature date by Tue Oct 6 (ATL-108).",
+   "Product: confirm which Sprint 41 stories can drop if the KYC blocker holds."
+  ]
+ },
+ "2026-10-09": {
+  "headline": "Sprint 41 closed at 54% (27 pts), the best sprint so far, but KYC is still blocked.",
+  "summary": [
+   "Delivered 27 pts: social sign-in (Apple entitlement approved Oct 6), email verification, analytics, iOS profile screen, rate limiting and the accessibility audit.",
+   "ATL-108 KYC has been blocked 9 days. The VeriID contract moved from Procurement to Legal for DPA review.",
+   "Carrying 23 pts into Sprint 42: ATL-108, ATL-111 Android profile, ATL-112 push opt-in (PR #219 in review) and ATL-115 E2E tests (not started).",
+   "Ben (QA) is at 50% on Payments regression from Oct 5, which puts the E2E suite at risk."
+  ],
+  "actions": {
+   "ATL-108": "Ask Legal for a DPA review date; if none by Oct 14, escalate to the Eng Director.",
+   "ATL-112": "Request a Mobile Platform reviewer for PR #219 before planning.",
+   "Over-commitment": "Plan Sprint 42 at 25 pts or less including carry-over."
+  },
+  "asks": [
+   "Legal: date for the VeriID DPA review (ATL-108).",
+   "QA manager: restore Ben to 100% on Atlas for the release, or name a backup for ATL-115."
+  ]
+ },
+ "2026-10-16": {
+  "headline": "Sprint 42 is off track: 11% done at the midpoint with three blockers and a production incident.",
+  "summary": [
+   "5 of 46 points done (11%) against 50% of the sprint elapsed. 42 pts were committed against a 22.5-pt average.",
+   "Blockers went from 1 to 3: ATL-108 KYC (16 days, Legal DPA), ATL-119 consent screen (Legal copy approval) and ATL-118 localisation (translation vendor).",
+   "PR #219 for ATL-112 has had no review in 8 days. ATL-115 E2E tests still have not started after 18 days.",
+   "Production incident INC-342 (verification links expiring after 5 minutes) pulled Omar onto hotfix ATL-120, slowing magic-link login (ATL-116)."
+  ],
+  "actions": {
+   "ATL-108": "Eng Director to escalate the DPA review with Legal this week; ask for one review covering both VeriID and the consent copy.",
+   "ATL-119": "Bundle with the ATL-108 Legal ask; build the screen with placeholder copy behind the feature flag.",
+   "ATL-118": "Get a delivery date from LinguaPro; fall back to English-only for the first rollout cohort.",
+   "ATL-112": "Platform lead to assign a reviewer for PR #219 within 24 hours.",
+   "ATL-115": "Pair Jordan with Ben for 2 days to scaffold the Detox/Espresso suite.",
+   "Scope creep": "Take the incident fix as unplanned work, but move ATL-122 to Sprint 43 unless something comes out.",
+   "Burndown": "Daily burndown review; decide at Tue stand-up what moves to Sprint 43."
+  },
+  "asks": [
+   "Eng Director: escalate the Legal review (VeriID DPA + consent copy) this week.",
+   "Platform lead: reviewer for PR #219 (ATL-112) within 24 hours.",
+   "QA manager: Ben back to 100% for Atlas through the Nov 6 release."
+  ]
+ },
+ "2026-10-23": {
+  "headline": "Sprint 42 closed at 20% (10 of 51 pts). The Nov 6 release is at risk and needs a scope decision this week.",
+  "summary": [
+   "Lowest delivery of the three sprints: 10 pts, against 18 and 27 before. 41 open pts roll into Sprint 43, which is nearly twice the 22.5-pt average velocity, with GA in 14 days.",
+   "Both release gates are waiting on the same Legal review: ATL-108 KYC has been blocked 23 days and ATL-119 consent screen 10 days. Legal has given no date.",
+   "PR #219 (ATL-112 push opt-in) has been in review 15 days; its second approver is out until Oct 28. ATL-115 E2E tests are untouched after 25 days.",
+   "9 pts were added mid-sprint, mostly bugs. ATL-121 (Apple 'Hide My Email' sign-in failure, ~4% of iOS signups on staging) is Highest and in progress.",
+   "Good news: localisation strings landed (ATL-118 unblocked and done) and the INC-342 verification-link hotfix shipped."
+  ],
+  "actions": {
+   "ATL-108": "Get a Legal decision by Wed Oct 28. If none, take KYC out of the Nov 6 scope and ship it behind the flag in a follow-up release.",
+   "ATL-119": "Same Legal review as ATL-108. Ask Legal to approve the consent copy first, separately, since it is a smaller decision.",
+   "ATL-112": "Platform lead to name a different second approver on Mon Oct 26 instead of waiting for Oct 28.",
+   "ATL-115": "Make E2E the top Sprint 43 item for Ben at 100%; without it there is no release sign-off.",
+   "ATL-122": "Pull into Sprint 43 week 1; the staged rollout depends on it.",
+   "Over-commitment": "Commit Sprint 43 at 23 pts or less. Order: ATL-121, ATL-122, ATL-115, ATL-112, ATL-117, then ATL-116.",
+   "Scope creep": "Keep a 4-pt buffer in Sprint 43 for beta bugs instead of adding them on top.",
+   "Burndown": "Run Sprint 43 with a mid-sprint go/no-go on Mon Nov 2.",
+   "Load": "Move ATL-117 review follow-ups off Lena so she can focus on ATL-121 and KYC."
+  },
+  "asks": [
+   "Legal: decision on the VeriID DPA and the GDPR consent copy by Wed Oct 28 (ATL-108, ATL-119).",
+   "Product (Maya): choose by Thu Oct 29 between shipping Nov 6 without KYC (flagged off) or moving GA to Nov 20.",
+   "Platform lead: second approver for PR #219 on Mon Oct 26 (ATL-112).",
+   "QA manager: Ben at 100% on Atlas through GA for the E2E suite (ATL-115)."
+  ]
+ }
+}
