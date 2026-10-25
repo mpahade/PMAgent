@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Atlas Weekly Status</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a single report column (max 980px) under a sticky week strip; each week is one status report. */
+:root{
+  --bg:#f5f6f4; --surface:#ffffff; --ink:#1b2321; --muted:#5d6a66; --line:#dde2df;
+  --accent:#0f6b63; --accent-soft:#e1efec;
+  --red:#c23b2e; --red-soft:#fbe9e6; --amber:#b7740a; --amber-soft:#fdf1dc; --green:#2c7a3f; --green-soft:#e4f2e6;
+  --f-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121816; --surface:#1a2220; --ink:#e6ece9; --muted:#9aa8a3; --line:#2c3633;
+  --accent:#4cc2b4; --accent-soft:#173a35;
+  --red:#ff7b6b; --red-soft:#3a1f1b; --amber:#f0b04a; --amber-soft:#3a2d14; --green:#6fcf86; --green-soft:#1a3322; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121816; --surface:#1a2220; --ink:#e6ece9; --muted:#9aa8a3; --line:#2c3633;
+  --accent:#4cc2b4; --accent-soft:#173a35;
+  --red:#ff7b6b; --red-soft:#3a1f1b; --amber:#f0b04a; --amber-soft:#3a2d14; --green:#6fcf86; --green-soft:#1a3322; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:980px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{background:var(--surface);border-bottom:1px solid var(--line)}
+header.top .wrap{padding-block:22px 16px;display:flex;flex-direction:column;gap:6px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(24px,4vw,32px);line-height:1.15;margin:0;text-wrap:balance}
+.weeks{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.weeks .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-width:thin}
+.wk{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-start;gap:2px;border:1px solid var(--line);background:var(--bg);color:var(--ink);
+  border-radius:6px;padding:6px 12px 7px;font:inherit;cursor:pointer;min-width:112px}
+.wk:hover{border-color:var(--accent)}
+.wk:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wk[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
+.wk .d{font-family:var(--f-mono);font-size:13px;font-weight:600}
+.wk .s{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:0 0 auto}
+.dot.RED{background:var(--red)}.dot.AMBER{background:var(--amber)}.dot.GREEN{background:var(--green)}
+main .wrap{padding-block:26px 48px;display:flex;flex-direction:column;gap:34px}
+section{display:flex;flex-direction:column;gap:12px;min-width:0}
+h2{font-family:var(--f-display);font-weight:700;font-size:19px;margin:0;display:flex;align-items:baseline;gap:10px}
+h2 .n{font-family:var(--f-mono);font-size:12px;color:var(--muted);font-weight:400}
+.status{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px 20px}
+.rag{font-family:var(--f-display);font-weight:800;font-size:15px;letter-spacing:.06em;padding:6px 12px;border-radius:4px}
+.rag.RED{background:var(--red-soft);color:var(--red)}.rag.AMBER{background:var(--amber-soft);color:var(--amber)}.rag.GREEN{background:var(--green-soft);color:var(--green)}
+.status .hl{flex:1 1 360px;font-size:18px;font-weight:600;min-width:0;text-wrap:balance}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:var(--muted)}
+.meta b{color:var(--ink);font-weight:600}
+ul.sum{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.kpi{background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+.kpi .l{font-size:13px;color:var(--muted)}
+.kpi .v{font-family:var(--f-display);font-weight:700;font-size:24px;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:14px;color:var(--muted);font-weight:500}
+.kpi .c{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.up{color:var(--red)}.down{color:var(--green)}
+.burn{display:flex;flex-direction:column;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+.bar{position:relative;height:22px;border-radius:4px;background:var(--bg);display:flex;overflow:hidden}
+.bar span{height:100%}
+.bar .marker{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.key{font-family:var(--f-mono);font-size:13px;font-weight:600;white-space:nowrap}
+.sev{font-family:var(--f-mono);font-size:11px;font-weight:600;padding:2px 7px;border-radius:3px;white-space:nowrap}
+.sev.HIGH{background:var(--red-soft);color:var(--red)}.sev.MEDIUM{background:var(--amber-soft);color:var(--amber)}
+.chip{display:inline-block;font-size:12px;border:1px solid var(--line);border-radius:999px;padding:0 8px;margin:0 4px 3px 0;white-space:nowrap;color:var(--muted)}
+.chip.new{border-color:var(--red);color:var(--red)}
+.tl{display:flex;gap:4px;flex-wrap:wrap}
+.st{font-family:var(--f-mono);font-size:11px;padding:2px 6px;border-radius:3px;background:var(--bg);white-space:nowrap}
+.st.Blocked{background:var(--red-soft);color:var(--red)}.st.Done{background:var(--green-soft);color:var(--green)}
+.st.In.Review{background:var(--amber-soft);color:var(--amber)}
+.muted{color:var(--muted)}
+ol.asks{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;max-width:76ch}
+ol.asks li::marker{font-family:var(--f-mono);color:var(--accent);font-weight:600}
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.chart h3{margin:0;font-size:14px;font-weight:600}
+.chart svg{width:100%;height:auto;display:block}
+.chart text{fill:var(--muted);font-family:var(--f-mono);font-size:10px}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+@media (prefers-reduced-motion: no-preference){.wk{transition:background .15s,border-color .15s}}
+</style>
+
+<header class="top"><div class="wrap">
+  <div class="eyebrow">PM Sprint Status Agent · Weekly report</div>
+  <h1>Atlas · Mobile Onboarding v2</h1>
+  <div class="meta" id="projmeta"></div>
+</div></header>
+<nav class="weeks" aria-label="Report week"><div class="wrap" id="weeks"></div></nav>
+<main><div class="wrap" id="report"></div></main>
+
+<script>
+const REPORTS = [{"week": "2026-09-18", "snapshot": 1, "sprint": "Sprint 40", "kind": "mid-sprint", "sprint_start": "2026-09-14", "sprint_end": "2026-09-25", "sprint_goal": "Core signup flow: social sign-in, account API, welcome screens", "release": "2026-11-06", "days_to_release": 49, "committed": 34, "scope": 34, "scope_added": 0, "added_keys": [], "done_pts": 2, "done_pct": 6, "elapsed_pct": 50, "items_total": 8, "items_open": 7, "status_pts": {"In Progress": 21, "To Do": 11, "Done": 2}, "avg_velocity": null, "velocity": {}, "blocked": [], "resolved_blockers": [], "carry_open": [], "review_stalls": [], "not_started": [], "overdue": [], "completed": [{"key": "ATL-109", "summary": "Crash on Android 12 when rotating during signup", "owner": "Jordan Kim", "pts": 2, "type": "Bug"}], "load": {"Lena Fischer": {"open_pts": 8, "blocked_pts": 0, "items": 1}, "Sofia Reyes": {"open_pts": 5, "blocked_pts": 0, "items": 1}, "Priya Nair": {"open_pts": 3, "blocked_pts": 0, "items": 1}, "Jordan Kim": {"open_pts": 6, "blocked_pts": 0, "items": 2}, "Omar Haddad": {"open_pts": 10, "blocked_pts": 0, "items": 2}}, "flags": [{"issue": "-", "summary": "Burndown", "sev": "HIGH", "types": ["Burndown"], "owner": "PM", "details": ["6% done vs 50% of sprint elapsed"]}], "stuck": [], "rag": "AMBER", "open_issues": [{"key": "ATL-101", "summary": "Google & Apple sign-in", "status": "In Progress", "owner": "Lena Fischer", "pts": 8, "prio": "High", "due": "2026-09-25"}, {"key": "ATL-102", "summary": "Onboarding screens design v2", "status": "In Progress", "owner": "Sofia Reyes", "pts": 5, "prio": "High", "due": "2026-09-22"}, {"key": "ATL-103", "summary": "Welcome carousel - iOS", "status": "In Progress", "owner": "Priya Nair", "pts": 3, "prio": "Medium", "due": "2026-09-25"}, {"key": "ATL-104", "summary": "Welcome carousel - Android", "status": "To Do", "owner": "Jordan Kim", "pts": 3, "prio": "Medium", "due": "2026-09-25"}, {"key": "ATL-105", "summary": "Account creation API v2", "status": "In Progress", "owner": "Omar Haddad", "pts": 5, "prio": "High", "due": "2026-09-23"}, {"key": "ATL-106", "summary": "Email verification service", "status": "To Do", "owner": "Omar Haddad", "pts": 5, "prio": "High", "due": "2026-09-25"}, {"key": "ATL-107", "summary": "Analytics events for onboarding funnel", "status": "To Do", "owner": "Jordan Kim", "pts": 3, "prio": "Medium", "due": "2026-10-02"}], "prev": null, "trend": {"weeks": ["2026-09-18"], "blocked": [0], "carry": [0], "done_pct": [6], "rag": ["AMBER"]}}, {"week": "2026-09-25", "snapshot": 2, "sprint": "Sprint 40", "kind": "sprint close", "sprint_start": "2026-09-14", "sprint_end": "2026-09-25", "sprint_goal": "Core signup flow: social sign-in, account API, welcome screens", "release": "2026-11-06", "days_to_release": 42, "committed": 34, "scope": 34, "scope_added": 0, "added_keys": [], "done_pts": 18, "done_pct": 53, "elapsed_pct": 100, "items_total": 8, "items_open": 3, "status_pts": {"In Progress": 8, "Done": 18, "In Review": 5, "To Do": 3}, "avg_velocity": null, "velocity": {"Sprint 40": 18}, "blocked": [], "resolved_blockers": [], "carry_open": [], "review_stalls": [], "not_started": ["ATL-107"], "overdue": [], "completed": [{"key": "ATL-102", "summary": "Onboarding screens design v2", "owner": "Sofia Reyes", "pts": 5, "type": "Story"}, {"key": "ATL-103", "summary": "Welcome carousel - iOS", "owner": "Priya Nair", "pts": 3, "type": "Story"}, {"key": "ATL-104", "summary": "Welcome carousel - Android", "owner": "Jordan Kim", "pts": 3, "type": "Story"}, {"key": "ATL-105", "summary": "Account creation API v2", "owner": "Omar Haddad", "pts": 5, "type": "Story"}], "load": {"Lena Fischer": {"open_pts": 8, "blocked_pts": 0, "items": 1}, "Omar Haddad": {"open_pts": 5, "blocked_pts": 0, "items": 1}, "Jordan Kim": {"open_pts": 3, "blocked_pts": 0, "items": 1}}, "flags": [{"issue": "ATL-107", "summary": "Analytics events for onboarding funnel", "sev": "MEDIUM", "types": ["Not started"], "details": ["To Do for 11 days"], "owner": "Jordan Kim"}, {"issue": "-", "summary": "Burndown", "sev": "HIGH", "types": ["Burndown"], "owner": "PM", "details": ["53% done vs 100% of sprint elapsed"]}], "stuck": [{"key": "ATL-107", "summary": "Analytics events for onboarding funnel", "owner": "Jordan Kim", "pts": 3, "sprints": ["S40"], "timeline": [{"date": "2026-09-18", "status": "To Do"}, {"date": "2026-09-25", "status": "To Do"}]}], "rag": "AMBER", "open_issues": [{"key": "ATL-101", "summary": "Google & Apple sign-in", "status": "In Progress", "owner": "Lena Fischer", "pts": 8, "prio": "High", "due": "2026-09-25"}, {"key": "ATL-106", "summary": "Email verification service", "status": "In Review", "owner": "Omar Haddad", "pts": 5, "prio": "High", "due": "2026-09-25"}, {"key": "ATL-107", "summary": "Analytics events for onboarding funnel", "status": "To Do", "owner": "Jordan Kim", "pts": 3, "prio": "Medium", "due": "2026-10-02"}], "prev": {"week": "2026-09-18", "sprint": "Sprint 40", "done_pts": 2, "done_pct": 6, "scope": 34, "blocked": 0, "carry": 0, "items_open": 7, "rag": "AMBER"}, "trend": {"weeks": ["2026-09-18", "2026-09-25"], "blocked": [0, 0], "carry": [0, 0], "done_pct": [6, 53], "rag": ["AMBER", "AMBER"]}}, {"week": "2026-10-02", "snapshot": 3, "sprint": "Sprint 41", "kind": "mid-sprint", "sprint_start": "2026-09-28", "sprint_end": "2026-10-09", "sprint_goal": "Verification & profile setup: KYC, profile screens, push opt-in", "release": "2026-11-06", "days_to_release": 35, "committed": 50, "scope": 50, "scope_added": 0, "added_keys": [], "done_pts": 5, "done_pct": 10, "elapsed_pct": 50, "items_total": 10, "items_open": 9, "status_pts": {"Blocked": 16, "Done": 5, "In Progress": 14, "To Do": 15}, "avg_velocity": 18.0, "velocity": {"Sprint 40": 18}, "blocked": [{"key": "ATL-101", "summary": "Google & Apple sign-in", "owner": "Lena Fischer", "pts": 8, "prio": "High", "days": 3, "note": "Waiting on Apple 'Sign in with Apple' entitlement for prod bundle ID (Apple review)", "sprints": ["S40", "S41"], "new": true}, {"key": "ATL-108", "summary": "KYC identity verification - VeriID integration", "owner": "Lena Fischer", "pts": 8, "prio": "Highest", "days": 2, "note": "VeriID vendor contract pending Procurement; no sandbox API keys", "sprints": ["S41"], "new": true}], "resolved_blockers": [], "carry_open": ["ATL-101", "ATL-107"], "review_stalls": [], "not_started": [], "overdue": ["ATL-101"], "completed": [{"key": "ATL-106", "summary": "Email verification service", "owner": "Omar Haddad", "pts": 5, "type": "Story"}], "load": {"Lena Fischer": {"open_pts": 16, "blocked_pts": 16, "items": 2}, "Jordan Kim": {"open_pts": 8, "blocked_pts": 0, "items": 2}, "Priya Nair": {"open_pts": 10, "blocked_pts": 0, "items": 2}, "Omar Haddad": {"open_pts": 3, "blocked_pts": 0, "items": 1}, "Sofia Reyes": {"open_pts": 3, "blocked_pts": 0, "items": 1}, "Ben Carter": {"open_pts": 5, "blocked_pts": 0, "items": 1}}, "flags": [{"issue": "ATL-108", "summary": "KYC identity verification - VeriID integration", "sev": "HIGH", "types": ["Blocker"], "details": ["Blocked 2 days: VeriID vendor contract pending Procurement; no sandbox API keys"], "owner": "Lena Fischer"}, {"issue": "ATL-101", "summary": "Google & Apple sign-in", "sev": "MEDIUM", "types": ["Blocker", "Carry-over", "Overdue"], "details": ["Blocked 3 days: Waiting on Apple 'Sign in with Apple' entitlement for prod bundle ID (Apple review)", "In sprint 2 (S40, S41)", "Due 2026-09-25 (7 days late)"], "owner": "Lena Fischer"}, {"issue": "ATL-107", "summary": "Analytics events for onboarding funnel", "sev": "MEDIUM", "types": ["Carry-over"], "details": ["In sprint 2 (S40, S41)"], "owner": "Jordan Kim"}, {"issue": "-", "summary": "Sprint commitment", "sev": "HIGH", "types": ["Over-commitment"], "owner": "PM / Team", "details": ["50 pts committed vs 18.0 pts average velocity"]}, {"issue": "-", "summary": "Burndown", "sev": "HIGH", "types": ["Burndown"], "owner": "PM", "details": ["10% done vs 50% of sprint elapsed"]}, {"issue": "-", "summary": "Load", "sev": "MEDIUM", "types": ["Load"], "owner": "PM", "details": ["Lena Fischer: 16 of 16 open pts are blocked"]}], "stuck": [{"key": "ATL-101", "summary": "Google & Apple sign-in", "owner": "Lena Fischer", "pts": 8, "sprints": ["S40", "S41"], "timeline": [{"date": "2026-09-18", "status": "In Progress"}, {"date": "2026-09-25", "status": "In Progress"}, {"date": "2026-10-02", "status": "Blocked"}]}, {"key": "ATL-107", "summary": "Analytics events for onboarding funnel", "owner": "Jordan Kim", "pts": 3, "sprints": ["S40", "S41"], "timeline": [{"date": "2026-09-18", "status": "To Do"}, {"date": "2026-09-25", "status": "To Do"}, {"date": "2026-10-02", "status": "In Progress"}]}], "rag": "AMBER", "open_issues": [{"key": "ATL-101", "summary": "Google & Apple sign-in", "status": "Blocked", "owner": "Lena Fischer", "pts": 8, "prio": "High", "due": "2026-09-25"}, {"key": "ATL-107", "summary": "Analytics events for onboarding funnel", "status": "In Progress", "owner": "Jordan Kim", "pts": 3, "prio": "Medium", "due": "2026-10-02"}, {"key": "ATL-108", "summary": "KYC identity verification - VeriID integration", "status": "Blocked", "owner": "Lena Fischer", "pts": 8, "prio": "Highest", "due": "2026-10-16"}, {"key": "ATL-110", "summary": "Profile setup screen - iOS", "status": "In Progress", "owner": "Priya Nair", "pts": 5, "prio": "Medium", "due": "2026-10-09"}, {"key": "ATL-111", "summary": "Profile setup screen - Android", "status": "To Do", "owner": "Jordan Kim", "pts": 5, "prio": "Medium", "due": "2026-10-09"}, {"key": "ATL-112", "summary": "Push notification opt-in flow", "status": "To Do", "owner": "Priya Nair", "pts": 5, "prio": "High", "due": "2026-10-16"}, {"key": "ATL-113", "summary": "Rate limiting on signup endpoint", "status": "In Progress", "owner": "Omar Haddad", "pts": 3, "prio": "High", "due": "2026-10-09"}, {"key": "ATL-114", "summary": "Accessibility audit of onboarding screens", "status": "In Progress", "owner": "Sofia Reyes", "pts": 3, "prio": "Medium", "due": "2026-10-09"}, {"key": "ATL-115", "summary": "E2E test suite for onboarding (Detox + Espresso)", "status": "To Do", "owner": "Ben Carter", "pts": 5, "prio": "High", "due": "2026-10-30"}], "prev": {"week": "2026-09-25", "sprint": "Sprint 40", "done_pts": 18, "done_pct": 53, "scope": 34, "blocked": 0, "carry": 0, "items_open": 3, "rag": "AMBER"}, "trend": {"weeks": ["2026-09-18", "2026-09-25", "2026-10-02"], "blocked": [0, 0, 2], "carry": [0, 0, 2], "done_pct": [6, 53, 10], "rag": ["AMBER", "AMBER", "AMBER"]}}, {"week": "2026-10-09", "snapshot": 4, "sprint": "Sprint 41", "kind": "sprint close", "sprint_start": "2026-09-28", "sprint_end": "2026-10-09", "sprint_goal": "Verification & profile setup: KYC, profile screens, push opt-in", "release": "2026-11-06", "days_to_release": 28, "committed": 50, "scope": 50, "scope_added": 0, "added_keys": [], "done_pts": 27, "done_pct": 54, "elapsed_pct": 100, "items_total": 10, "items_open": 4, "status_pts": {"Done": 27, "Blocked": 8, "In Progress": 5, "In Review": 5, "To Do": 5}, "avg_velocity": 18.0, "velocity": {"Sprint 40": 18, "Sprint 41": 27}, "blocked": [{"key": "ATL-108", "summary": "KYC identity verification - VeriID integration", "owner": "Lena Fischer", "pts": 8, "prio": "Highest", "days": 9, "note": "Procurement: contract with Legal for DPA review. Carried to Sprint 42", "sprints": ["S41"], "new": false}], "resolved_blockers": ["ATL-101"], "carry_open": [], "review_stalls": [], "not_started": ["ATL-115"], "overdue": [], "completed": [{"key": "ATL-101", "summary": "Google & Apple sign-in", "owner": "Lena Fischer", "pts": 8, "type": "Story"}, {"key": "ATL-107", "summary": "Analytics events for onboarding funnel", "owner": "Jordan Kim", "pts": 3, "type": "Task"}, {"key": "ATL-110", "summary": "Profile setup screen - iOS", "owner": "Priya Nair", "pts": 5, "type": "Story"}, {"key": "ATL-113", "summary": "Rate limiting on signup endpoint", "owner": "Omar Haddad", "pts": 3, "type": "Story"}, {"key": "ATL-114", "summary": "Accessibility audit of onboarding screens", "owner": "Sofia Reyes", "pts": 3, "type": "Task"}], "load": {"Lena Fischer": {"open_pts": 8, "blocked_pts": 8, "items": 1}, "Jordan Kim": {"open_pts": 5, "blocked_pts": 0, "items": 1}, "Priya Nair": {"open_pts": 5, "blocked_pts": 0, "items": 1}, "Ben Carter": {"open_pts": 5, "blocked_pts": 0, "items": 1}}, "flags": [{"issue": "ATL-108", "summary": "KYC identity verification - VeriID integration", "sev": "HIGH", "types": ["Blocker"], "details": ["Blocked 9 days: Procurement: contract with Legal for DPA review. Carried to Sprint 42"], "owner": "Lena Fischer"}, {"issue": "ATL-115", "summary": "E2E test suite for onboarding (Detox + Espresso)", "sev": "MEDIUM", "types": ["Not started"], "details": ["To Do for 11 days"], "owner": "Ben Carter"}, {"issue": "-", "summary": "Sprint commitment", "sev": "HIGH", "types": ["Over-commitment"], "owner": "PM / Team", "details": ["50 pts committed vs 18.0 pts average velocity"]}, {"issue": "-", "summary": "Burndown", "sev": "HIGH", "types": ["Burndown"], "owner": "PM", "details": ["54% done vs 100% of sprint elapsed"]}, {"issue": "-", "summary": "Load", "sev": "MEDIUM", "types": ["Load"], "owner": "PM", "details": ["Lena Fischer: 8 of 8 open pts are blocked"]}], "stuck": [{"key": "ATL-115", "summary": "E2E test suite for onboarding (Detox + Espresso)", "owner": "Ben Carter", "pts": 5, "sprints": ["S41"], "timeline": [{"date": "2026-10-02", "status": "To Do"}, {"date": "2026-10-09", "status": "To Do"}]}], "rag": "AMBER", "open_issues": [{"key": "ATL-108", "summary": "KYC identity verification - VeriID integration", "status": "Blocked", "owner": "Lena Fischer", "pts": 8, "prio": "Highest", "due": "2026-10-16"}, {"key": "ATL-111", "summary": "Profile setup screen - Android", "status": "In Progress", "owner": "Jordan Kim", "pts": 5, "prio": "Medium", "due": "2026-10-09"}, {"key": "ATL-112", "summary": "Push notification opt-in flow", "status": "In Review", "owner": "Priya Nair", "pts": 5, "prio": "High", "due": "2026-10-16"}, {"key": "ATL-115", "summary": "E2E test suite for onboarding (Detox + Espresso)", "status": "To Do", "owner": "Ben Carter", "pts": 5, "prio": "High", "due": "2026-10-30"}], "prev": {"week": "2026-10-02", "sprint": "Sprint 41", "done_pts": 5, "done_pct": 10, "scope": 50, "blocked": 2, "carry": 2, "items_open": 9, "rag": "AMBER"}, "trend": {"weeks": ["2026-09-18", "2026-09-25", "2026-10-02", "2026-10-09"], "blocked": [0, 0, 2, 1], "carry": [0, 0, 2, 0], "done_pct": [6, 53, 10, 54], "rag": ["AMBER", "AMBER", "AMBER", "AMBER"]}}, {"week": "2026-10-16", "snapshot": 5, "sprint": "Sprint 42", "kind": "mid-sprint", "sprint_start": "2026-10-12", "sprint_end": "2026-10-23", "sprint_goal": "Release hardening: magic link, consent, localisation, E2E tests", "release": "2026-11-06", "days_to_release": 21, "committed": 42, "scope": 46, "scope_added": 4, "added_keys": ["ATL-120", "ATL-122"], "done_pts": 5, "done_pct": 11, "elapsed_pct": 50, "items_total": 10, "items_open": 9, "status_pts": {"Blocked": 14, "Done": 5, "In Review": 5, "To Do": 7, "In Progress": 15}, "avg_velocity": 22.5, "velocity": {"Sprint 40": 18, "Sprint 41": 27}, "blocked": [{"key": "ATL-108", "summary": "KYC identity verification - VeriID integration", "owner": "Lena Fischer", "pts": 8, "prio": "Highest", "days": 16, "note": "Still no sandbox keys. Lena building against mocked VeriID responses", "sprints": ["S41", "S42"], "new": false}, {"key": "ATL-118", "summary": "Localisation: ES / FR / DE strings", "owner": "Sofia Reyes", "pts": 3, "prio": "Medium", "days": 3, "note": "Waiting on translation vendor (LinguaPro) delivery", "sprints": ["S42"], "new": true}, {"key": "ATL-119", "summary": "Terms & privacy consent screen", "owner": "Priya Nair", "pts": 3, "prio": "High", "days": 3, "note": "Awaiting Legal approval of GDPR consent copy", "sprints": ["S42"], "new": true}], "resolved_blockers": [], "carry_open": ["ATL-108", "ATL-112", "ATL-115"], "review_stalls": ["ATL-112"], "not_started": ["ATL-115"], "overdue": [], "completed": [{"key": "ATL-111", "summary": "Profile setup screen - Android", "owner": "Jordan Kim", "pts": 5, "type": "Story"}], "load": {"Lena Fischer": {"open_pts": 13, "blocked_pts": 8, "items": 2}, "Priya Nair": {"open_pts": 8, "blocked_pts": 3, "items": 2}, "Ben Carter": {"open_pts": 5, "blocked_pts": 0, "items": 1}, "Omar Haddad": {"open_pts": 12, "blocked_pts": 0, "items": 3}, "Sofia Reyes": {"open_pts": 3, "blocked_pts": 3, "items": 1}}, "flags": [{"issue": "ATL-108", "summary": "KYC identity verification - VeriID integration", "sev": "HIGH", "types": ["Blocker", "Carry-over"], "details": ["Blocked 16 days: Still no sandbox keys. Lena building against mocked VeriID responses", "In sprint 2 (S41, S42)"], "owner": "Lena Fischer"}, {"issue": "ATL-115", "summary": "E2E test suite for onboarding (Detox + Espresso)", "sev": "HIGH", "types": ["Not started", "Carry-over"], "details": ["To Do for 18 days", "In sprint 2 (S41, S42)"], "owner": "Ben Carter"}, {"issue": "ATL-112", "summary": "Push notification opt-in flow", "sev": "MEDIUM", "types": ["Review stall", "Carry-over"], "details": ["In Review for 8 days. PR #219 still unreviewed; pinged platform lead Oct 14", "In sprint 2 (S41, S42)"], "owner": "Priya Nair"}, {"issue": "ATL-118", "summary": "Localisation: ES / FR / DE strings", "sev": "MEDIUM", "types": ["Blocker"], "details": ["Blocked 3 days: Waiting on translation vendor (LinguaPro) delivery"], "owner": "Sofia Reyes"}, {"issue": "ATL-119", "summary": "Terms & privacy consent screen", "sev": "MEDIUM", "types": ["Blocker"], "details": ["Blocked 3 days: Awaiting Legal approval of GDPR consent copy"], "owner": "Priya Nair"}, {"issue": "-", "summary": "Sprint commitment", "sev": "HIGH", "types": ["Over-commitment"], "owner": "PM / Team", "details": ["42 pts committed vs 22.5 pts average velocity"]}, {"issue": "-", "summary": "Scope change", "sev": "MEDIUM", "types": ["Scope creep"], "owner": "PM", "details": ["+4 pts added mid-sprint (ATL-120, ATL-122)"]}, {"issue": "-", "summary": "Burndown", "sev": "MEDIUM", "types": ["Burndown"], "owner": "PM", "details": ["11% done vs 50% of sprint elapsed"]}, {"issue": "-", "summary": "Load", "sev": "MEDIUM", "types": ["Load"], "owner": "PM", "details": ["Lena Fischer: 8 of 13 open pts are blocked"]}], "stuck": [{"key": "ATL-108", "summary": "KYC identity verification - VeriID integration", "owner": "Lena Fischer", "pts": 8, "sprints": ["S41", "S42"], "timeline": [{"date": "2026-10-02", "status": "Blocked"}, {"date": "2026-10-09", "status": "Blocked"}, {"date": "2026-10-16", "status": "Blocked"}]}, {"key": "ATL-112", "summary": "Push notification opt-in flow", "owner": "Priya Nair", "pts": 5, "sprints": ["S41", "S42"], "timeline": [{"date": "2026-10-02", "status": "To Do"}, {"date": "2026-10-09", "status": "In Review"}, {"date": "2026-10-16", "status": "In Review"}]}, {"key": "ATL-115", "summary": "E2E test suite for onboarding (Detox + Espresso)", "owner": "Ben Carter", "pts": 5, "sprints": ["S41", "S42"], "timeline": [{"date": "2026-10-02", "status": "To Do"}, {"date": "2026-10-09", "status": "To Do"}, {"date": "2026-10-16", "status": "To Do"}]}], "rag": "RED", "open_issues": [{"key": "ATL-108", "summary": "KYC identity verification - VeriID integration", "status": "Blocked", "owner": "Lena Fischer", "pts": 8, "prio": "Highest", "due": "2026-10-16"}, {"key": "ATL-112", "summary": "Push notification opt-in flow", "status": "In Review", "owner": "Priya Nair", "pts": 5, "prio": "High", "due": "2026-10-16"}, {"key": "ATL-115", "summary": "E2E test suite for onboarding (Detox + Espresso)", "status": "To Do", "owner": "Ben Carter", "pts": 5, "prio": "High", "due": "2026-10-30"}, {"key": "ATL-116", "summary": "Passwordless magic-link login", "status": "In Progress", "owner": "Omar Haddad", "pts": 8, "prio": "High", "due": "2026-10-23"}, {"key": "ATL-117", "summary": "Save onboarding progress (resume later)", "status": "In Progress", "owner": "Lena Fischer", "pts": 5, "prio": "Medium", "due": "2026-10-23"}, {"key": "ATL-118", "summary": "Localisation: ES / FR / DE strings", "status": "Blocked", "owner": "Sofia Reyes", "pts": 3, "prio": "Medium", "due": "2026-10-21"}, {"key": "ATL-119", "summary": "Terms & privacy consent screen", "status": "Blocked", "owner": "Priya Nair", "pts": 3, "prio": "High", "due": "2026-10-23"}, {"key": "ATL-120", "summary": "Email verification link expires after 5 min instead of 24 h", "status": "In Progress", "owner": "Omar Haddad", "pts": 2, "prio": "Highest", "due": "2026-10-17"}, {"key": "ATL-122", "summary": "Feature-flag rollout config for onboarding v2", "status": "To Do", "owner": "Omar Haddad", "pts": 2, "prio": "High", "due": "2026-10-30"}], "prev": {"week": "2026-10-09", "sprint": "Sprint 41", "done_pts": 27, "done_pct": 54, "scope": 50, "blocked": 1, "carry": 0, "items_open": 4, "rag": "AMBER"}, "trend": {"weeks": ["2026-09-18", "2026-09-25", "2026-10-02", "2026-10-09", "2026-10-16"], "blocked": [0, 0, 2, 1, 3], "carry": [0, 0, 2, 0, 3], "done_pct": [6, 53, 10, 54, 11], "rag": ["AMBER", "AMBER", "AMBER", "AMBER", "RED"]}}, {"week": "2026-10-23", "snapshot": 6, "sprint": "Sprint 42", "kind": "sprint close", "sprint_start": "2026-10-12", "sprint_end": "2026-10-23", "sprint_goal": "Release hardening: magic link, consent, localisation, E2E tests", "release": "2026-11-06", "days_to_release": 14, "committed": 42, "scope": 51, "scope_added": 9, "added_keys": ["ATL-120", "ATL-122", "ATL-121", "ATL-123"], "done_pts": 10, "done_pct": 20, "elapsed_pct": 100, "items_total": 12, "items_open": 9, "status_pts": {"Blocked": 11, "Done": 10, "In Review": 10, "To Do": 9, "In Progress": 11}, "avg_velocity": 22.5, "velocity": {"Sprint 40": 18, "Sprint 41": 27, "Sprint 42": 10}, "blocked": [{"key": "ATL-108", "summary": "KYC identity verification - VeriID integration", "owner": "Lena Fischer", "pts": 8, "prio": "Highest", "days": 23, "note": "Legal DPA review ongoing, no ETA. Release Nov 6 cannot pass KYC without it", "sprints": ["S41", "S42"], "new": false}, {"key": "ATL-119", "summary": "Terms & privacy consent screen", "owner": "Priya Nair", "pts": 3, "prio": "High", "days": 10, "note": "Legal reviewing copy together with VeriID DPA; no date given", "sprints": ["S42"], "new": false}], "resolved_blockers": ["ATL-118"], "carry_open": ["ATL-108", "ATL-112", "ATL-115"], "review_stalls": ["ATL-112"], "not_started": ["ATL-115", "ATL-122"], "overdue": ["ATL-108", "ATL-112"], "completed": [{"key": "ATL-118", "summary": "Localisation: ES / FR / DE strings", "owner": "Sofia Reyes", "pts": 3, "type": "Task"}, {"key": "ATL-120", "summary": "Email verification link expires after 5 min instead of 24 h", "owner": "Omar Haddad", "pts": 2, "type": "Bug"}], "load": {"Lena Fischer": {"open_pts": 16, "blocked_pts": 8, "items": 3}, "Priya Nair": {"open_pts": 8, "blocked_pts": 3, "items": 2}, "Ben Carter": {"open_pts": 5, "blocked_pts": 0, "items": 1}, "Omar Haddad": {"open_pts": 10, "blocked_pts": 0, "items": 2}, "Jordan Kim": {"open_pts": 2, "blocked_pts": 0, "items": 1}}, "flags": [{"issue": "ATL-108", "summary": "KYC identity verification - VeriID integration", "sev": "HIGH", "types": ["Blocker", "Carry-over", "Overdue"], "details": ["Blocked 23 days: Legal DPA review ongoing, no ETA. Release Nov 6 cannot pass KYC without it", "In sprint 2 (S41, S42)", "Due 2026-10-16 (7 days late)"], "owner": "Lena Fischer"}, {"issue": "ATL-112", "summary": "Push notification opt-in flow", "sev": "HIGH", "types": ["Review stall", "Carry-over", "Overdue"], "details": ["In Review for 15 days. PR #219: 1 of 2 required approvals; second reviewer on leave until Oct 28", "In sprint 2 (S41, S42)", "Due 2026-10-16 (7 days late)"], "owner": "Priya Nair"}, {"issue": "ATL-115", "summary": "E2E test suite for onboarding (Detox + Espresso)", "sev": "HIGH", "types": ["Not started", "Carry-over"], "details": ["To Do for 25 days", "In sprint 2 (S41, S42)"], "owner": "Ben Carter"}, {"issue": "ATL-119", "summary": "Terms & privacy consent screen", "sev": "HIGH", "types": ["Blocker"], "details": ["Blocked 10 days: Legal reviewing copy together with VeriID DPA; no date given"], "owner": "Priya Nair"}, {"issue": "ATL-122", "summary": "Feature-flag rollout config for onboarding v2", "sev": "MEDIUM", "types": ["Not started"], "details": ["To Do for 8 days"], "owner": "Omar Haddad"}, {"issue": "-", "summary": "Sprint commitment", "sev": "HIGH", "types": ["Over-commitment"], "owner": "PM / Team", "details": ["42 pts committed vs 22.5 pts average velocity"]}, {"issue": "-", "summary": "Scope change", "sev": "HIGH", "types": ["Scope creep"], "owner": "PM", "details": ["+9 pts added mid-sprint (ATL-120, ATL-122, ATL-121, ATL-123)"]}, {"issue": "-", "summary": "Burndown", "sev": "HIGH", "types": ["Burndown"], "owner": "PM", "details": ["20% done vs 100% of sprint elapsed"]}, {"issue": "-", "summary": "Load", "sev": "MEDIUM", "types": ["Load"], "owner": "PM", "details": ["Lena Fischer holds 16 open pts"]}], "stuck": [{"key": "ATL-108", "summary": "KYC identity verification - VeriID integration", "owner": "Lena Fischer", "pts": 8, "sprints": ["S41", "S42"], "timeline": [{"date": "2026-10-02", "status": "Blocked"}, {"date": "2026-10-09", "status": "Blocked"}, {"date": "2026-10-16", "status": "Blocked"}, {"date": "2026-10-23", "status": "Blocked"}]}, {"key": "ATL-112", "summary": "Push notification opt-in flow", "owner": "Priya Nair", "pts": 5, "sprints": ["S41", "S42"], "timeline": [{"date": "2026-10-02", "status": "To Do"}, {"date": "2026-10-09", "status": "In Review"}, {"date": "2026-10-16", "status": "In Review"}, {"date": "2026-10-23", "status": "In Review"}]}, {"key": "ATL-115", "summary": "E2E test suite for onboarding (Detox + Espresso)", "owner": "Ben Carter", "pts": 5, "sprints": ["S41", "S42"], "timeline": [{"date": "2026-10-02", "status": "To Do"}, {"date": "2026-10-09", "status": "To Do"}, {"date": "2026-10-16", "status": "To Do"}, {"date": "2026-10-23", "status": "To Do"}]}, {"key": "ATL-122", "summary": "Feature-flag rollout config for onboarding v2", "owner": "Omar Haddad", "pts": 2, "sprints": ["S42"], "timeline": [{"date": "2026-10-16", "status": "To Do"}, {"date": "2026-10-23", "status": "To Do"}]}], "rag": "RED", "open_issues": [{"key": "ATL-108", "summary": "KYC identity verification - VeriID integration", "status": "Blocked", "owner": "Lena Fischer", "pts": 8, "prio": "Highest", "due": "2026-10-16"}, {"key": "ATL-112", "summary": "Push notification opt-in flow", "status": "In Review", "owner": "Priya Nair", "pts": 5, "prio": "High", "due": "2026-10-16"}, {"key": "ATL-115", "summary": "E2E test suite for onboarding (Detox + Espresso)", "status": "To Do", "owner": "Ben Carter", "pts": 5, "prio": "High", "due": "2026-10-30"}, {"key": "ATL-116", "summary": "Passwordless magic-link login", "status": "In Progress", "owner": "Omar Haddad", "pts": 8, "prio": "High", "due": "2026-10-23"}, {"key": "ATL-117", "summary": "Save onboarding progress (resume later)", "status": "In Review", "owner": "Lena Fischer", "pts": 5, "prio": "Medium", "due": "2026-10-23"}, {"key": "ATL-119", "summary": "Terms & privacy consent screen", "status": "Blocked", "owner": "Priya Nair", "pts": 3, "prio": "High", "due": "2026-10-23"}, {"key": "ATL-122", "summary": "Feature-flag rollout config for onboarding v2", "status": "To Do", "owner": "Omar Haddad", "pts": 2, "prio": "High", "due": "2026-10-30"}, {"key": "ATL-121", "summary": "Apple sign-in fails for 'Hide My Email' relay users", "status": "In Progress", "owner": "Lena Fischer", "pts": 3, "prio": "Highest", "due": "2026-10-27"}, {"key": "ATL-123", "summary": "Profile photo upload hangs on slow networks", "status": "To Do", "owner": "Jordan Kim", "pts": 2, "prio": "Medium", "due": "2026-10-30"}], "prev": {"week": "2026-10-16", "sprint": "Sprint 42", "done_pts": 5, "done_pct": 11, "scope": 46, "blocked": 3, "carry": 3, "items_open": 9, "rag": "RED"}, "trend": {"weeks": ["2026-09-18", "2026-09-25", "2026-10-02", "2026-10-09", "2026-10-16", "2026-10-23"], "blocked": [0, 0, 2, 1, 3, 2], "carry": [0, 0, 2, 0, 3, 3], "done_pct": [6, 53, 10, 54, 11, 20], "rag": ["AMBER", "AMBER", "AMBER", "AMBER", "RED", "RED"]}}];
+const NARR = {"2026-09-18": {"headline": "Sprint 40 is mid-way with little closed yet, but nothing is blocked.", "summary": ["2 of 34 points are done (6%) at the sprint midpoint. Five stories are in progress and should land next week.", "The Android 12 rotation crash (ATL-109) was hotfixed in 1.14.2.", "No blockers. The main schedule risk is ATL-101: the Apple sign-in half needs an Apple entitlement that can take days to approve."], "actions": {"Burndown": "Check in at Monday stand-up on what will close by Friday; flag anything that will not.", "ATL-101": "Submit the Sign in with Apple entitlement request now so Apple review does not gate the sprint."}, "asks": ["Lena: confirm the Apple entitlement request for ATL-101 is submitted by Mon Sep 21."]}, "2026-09-25": {"headline": "Sprint 40 closed at 53% (18 of 34 pts). Three items carry into Sprint 41.", "summary": ["Delivered: onboarding design v2, both welcome carousels, account creation API v2 and the Android crash fix.", "Carrying over 16 pts: ATL-101 social sign-in (Apple half), ATL-106 email verification (in review) and ATL-107 analytics (not started).", "Sprint 41 is planned at 50 pts against an 18-pt first-sprint velocity. That plan is very likely to slip."], "actions": {"Burndown": "Review why 3 items slipped in the retro; size Sprint 41 against 18-20 pts.", "Scope creep": "Hold mid-sprint adds to bugs only."}, "asks": ["Product (Maya): trim Sprint 41 from 50 pts to about 30 at planning on Mon Sep 28.", "Procurement: start the VeriID contract now; ATL-108 KYC needs sandbox keys in Sprint 41."]}, "2026-10-02": {"headline": "Sprint 41 has two blockers, including the release-critical KYC integration.", "summary": ["5 of 50 points done (10%) at the sprint midpoint. The 50-pt commitment is 2.8x the 18-pt average velocity.", "New blocker ATL-108 (KYC, Highest): no VeriID sandbox keys until Procurement signs the vendor contract.", "New blocker ATL-101: Apple has not yet approved the Sign in with Apple entitlement for the production bundle.", "ATL-106 email verification is done; ATL-107 analytics has started after carrying over."], "actions": {"ATL-108": "Procurement to give a contract signature date by Tue Oct 6; Lena to build against mocked VeriID responses meanwhile.", "ATL-101": "Follow up with Apple developer support; ship Google sign-in independently if Apple slips past Oct 9.", "Over-commitment": "Agree now which ~25 pts will not make it, so the slip is planned rather than discovered.", "Burndown": "Daily burndown check until the blockers clear."}, "asks": ["Procurement: VeriID contract signature date by Tue Oct 6 (ATL-108).", "Product: confirm which Sprint 41 stories can drop if the KYC blocker holds."]}, "2026-10-09": {"headline": "Sprint 41 closed at 54% (27 pts), the best sprint so far, but KYC is still blocked.", "summary": ["Delivered 27 pts: social sign-in (Apple entitlement approved Oct 6), email verification, analytics, iOS profile screen, rate limiting and the accessibility audit.", "ATL-108 KYC has been blocked 9 days. The VeriID contract moved from Procurement to Legal for DPA review.", "Carrying 23 pts into Sprint 42: ATL-108, ATL-111 Android profile, ATL-112 push opt-in (PR #219 in review) and ATL-115 E2E tests (not started).", "Ben (QA) is at 50% on Payments regression from Oct 5, which puts the E2E suite at risk."], "actions": {"ATL-108": "Ask Legal for a DPA review date; if none by Oct 14, escalate to the Eng Director.", "ATL-112": "Request a Mobile Platform reviewer for PR #219 before planning.", "Over-commitment": "Plan Sprint 42 at 25 pts or less including carry-over."}, "asks": ["Legal: date for the VeriID DPA review (ATL-108).", "QA manager: restore Ben to 100% on Atlas for the release, or name a backup for ATL-115."]}, "2026-10-16": {"headline": "Sprint 42 is off track: 11% done at the midpoint with three blockers and a production incident.", "summary": ["5 of 46 points done (11%) against 50% of the sprint elapsed. 42 pts were committed against a 22.5-pt average.", "Blockers went from 1 to 3: ATL-108 KYC (16 days, Legal DPA), ATL-119 consent screen (Legal copy approval) and ATL-118 localisation (translation vendor).", "PR #219 for ATL-112 has had no review in 8 days. ATL-115 E2E tests still have not started after 18 days.", "Production incident INC-342 (verification links expiring after 5 minutes) pulled Omar onto hotfix ATL-120, slowing magic-link login (ATL-116)."], "actions": {"ATL-108": "Eng Director to escalate the DPA review with Legal this week; ask for one review covering both VeriID and the consent copy.", "ATL-119": "Bundle with the ATL-108 Legal ask; build the screen with placeholder copy behind the feature flag.", "ATL-118": "Get a delivery date from LinguaPro; fall back to English-only for the first rollout cohort.", "ATL-112": "Platform lead to assign a reviewer for PR #219 within 24 hours.", "ATL-115": "Pair Jordan with Ben for 2 days to scaffold the Detox/Espresso suite.", "Scope creep": "Take the incident fix as unplanned work, but move ATL-122 to Sprint 43 unless something comes out.", "Burndown": "Daily burndown review; decide at Tue stand-up what moves to Sprint 43."}, "asks": ["Eng Director: escalate the Legal review (VeriID DPA + consent copy) this week.", "Platform lead: reviewer for PR #219 (ATL-112) within 24 hours.", "QA manager: Ben back to 100% for Atlas through the Nov 6 release."]}, "2026-10-23": {"headline": "Sprint 42 closed at 20% (10 of 51 pts). The Nov 6 release is at risk and needs a scope decision this week.", "summary": ["Lowest delivery of the three sprints: 10 pts, against 18 and 27 before. 41 open pts roll into Sprint 43, which is nearly twice the 22.5-pt average velocity, with GA in 14 days.", "Both release gates are waiting on the same Legal review: ATL-108 KYC has been blocked 23 days and ATL-119 consent screen 10 days. Legal has given no date.", "PR #219 (ATL-112 push opt-in) has been in review 15 days; its second approver is out until Oct 28. ATL-115 E2E tests are untouched after 25 days.", "9 pts were added mid-sprint, mostly bugs. ATL-121 (Apple 'Hide My Email' sign-in failure, ~4% of iOS signups on staging) is Highest and in progress.", "Good news: localisation strings landed (ATL-118 unblocked and done) and the INC-342 verification-link hotfix shipped."], "actions": {"ATL-108": "Get a Legal decision by Wed Oct 28. If none, take KYC out of the Nov 6 scope and ship it behind the flag in a follow-up release.", "ATL-119": "Same Legal review as ATL-108. Ask Legal to approve the consent copy first, separately, since it is a smaller decision.", "ATL-112": "Platform lead to name a different second approver on Mon Oct 26 instead of waiting for Oct 28.", "ATL-115": "Make E2E the top Sprint 43 item for Ben at 100%; without it there is no release sign-off.", "ATL-122": "Pull into Sprint 43 week 1; the staged rollout depends on it.", "Over-commitment": "Commit Sprint 43 at 23 pts or less. Order: ATL-121, ATL-122, ATL-115, ATL-112, ATL-117, then ATL-116.", "Scope creep": "Keep a 4-pt buffer in Sprint 43 for beta bugs instead of adding them on top.", "Burndown": "Run Sprint 43 with a mid-sprint go/no-go on Mon Nov 2.", "Load": "Move ATL-117 review follow-ups off Lena so she can focus on ATL-121 and KYC."}, "asks": ["Legal: decision on the VeriID DPA and the GDPR consent copy by Wed Oct 28 (ATL-108, ATL-119).", "Product (Maya): choose by Thu Oct 29 between shipping Nov 6 without KYC (flagged off) or moving GA to Nov 20.", "Platform lead: second approver for PR #219 on Mon Oct 26 (ATL-112).", "QA manager: Ben at 100% on Atlas through GA for the E2E suite (ATL-115)."]}};
+const DEFAULT_ACTION = {
+  "Blocker":"Escalate the dependency named in the notes and agree an ETA or a descope decision.",
+  "Review stall":"Assign a second reviewer and set a 48-hour review target.",
+  "Not started":"Pull it into this week or move it to the backlog explicitly.",
+  "Carry-over":"Re-confirm scope and owner at planning.",
+  "Overdue":"Re-baseline the due date with the owner.",
+  "Over-commitment":"Re-plan to the average velocity.",
+  "Scope creep":"Trade out equal points for anything added.",
+  "Burndown":"Review burndown daily and cut scope early.",
+  "Load":"Rebalance open work across the team."
+};
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = iso => new Date(iso + "T12:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric"});
+const sprintShort = s => s.replace("Sprint ","S");
+
+function delta(now, prev, worseWhenUp){
+  if (prev == null) return "";
+  const d = now - prev;
+  if (d === 0) return `<span class="c">same as last week</span>`;
+  const cls = (d > 0) === worseWhenUp ? "up" : "down";
+  return `<span class="c ${cls}">${d > 0 ? "▲" : "▼"} ${Math.abs(d)} vs last week</span>`;
+}
+
+function velocityChart(r){
+  const sprints = Object.keys(r.velocity);
+  const committed = {};
+  REPORTS.forEach(x => { if (x.committed) committed[x.sprint] = x.committed; });
+  if (!sprints.length) return `<p class="muted" style="margin:0">No sprint has closed yet.</p>`;
+  const W = 300, H = 150, pad = {l:28,b:22,t:10,r:6};
+  const max = 60, y = v => H - pad.b - (v / max) * (H - pad.b - pad.t);
+  const bw = 22, gap = (W - pad.l - pad.r) / sprints.length;
+  let g = "";
+  [0,20,40,60].forEach(t => g += `<line x1="${pad.l}" x2="${W-pad.r}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)" stroke-width="1"/><text x="${pad.l-6}" y="${y(t)+3}" text-anchor="end">${t}</text>`);
+  sprints.forEach((s,i) => {
+    const cx = pad.l + gap*i + gap/2;
+    const c = committed[s], d = r.velocity[s];
+    g += `<rect x="${cx-bw-2}" y="${y(c)}" width="${bw}" height="${y(0)-y(c)}" fill="var(--line)"/>`;
+    g += `<rect x="${cx+2}" y="${y(d)}" width="${bw}" height="${y(0)-y(d)}" fill="var(--accent)"/>`;
+    g += `<text x="${cx-bw/2-2}" y="${y(c)-4}" text-anchor="middle">${c}</text><text x="${cx+bw/2+2}" y="${y(d)-4}" text-anchor="middle" style="fill:var(--ink);font-weight:600">${d}</text>`;
+    g += `<text x="${cx}" y="${H-6}" text-anchor="middle">${sprintShort(s)}</text>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Committed versus done points per sprint">${g}</svg>
+  <div class="legend"><span><i style="background:var(--line)"></i>Committed at planning</span><span><i style="background:var(--accent)"></i>Done at close</span></div>`;
+}
+
+function trendChart(r){
+  const t = r.trend, n = t.weeks.length;
+  const W = 300, H = 150, pad = {l:24,b:22,t:12,r:10}, max = 4;
+  const x = i => n === 1 ? (W+pad.l-pad.r)/2 : pad.l + i * (W - pad.l - pad.r) / (n - 1);
+  const y = v => H - pad.b - (v / max) * (H - pad.b - pad.t);
+  let g = "";
+  [0,1,2,3,4].forEach(v => g += `<line x1="${pad.l}" x2="${W-pad.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${pad.l-6}" y="${y(v)+3}" text-anchor="end">${v}</text>`);
+  const line = (arr, col) => {
+    const pts = arr.map((v,i) => `${x(i)},${y(v)}`).join(" ");
+    let s = n > 1 ? `<polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2"/>` : "";
+    arr.forEach((v,i) => s += `<circle cx="${x(i)}" cy="${y(v)}" r="${i===n-1?4:2.5}" fill="${col}"/>`);
+    return s;
+  };
+  g += line(t.carry, "var(--amber)") + line(t.blocked, "var(--red)");
+  t.weeks.forEach((w,i) => g += `<text x="${x(i)}" y="${H-6}" text-anchor="middle">${fmt(w)}</text>`);
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Blocked and carried-over items by week">${g}</svg>
+  <div class="legend"><span><i style="background:var(--red)"></i>Blocked items</span><span><i style="background:var(--amber)"></i>Open carry-overs</span></div>`;
+}
+
+function render(week){
+  const r = REPORTS.find(x => x.week === week) || REPORTS[REPORTS.length-1];
+  const nr = NARR[r.week] || {summary:[],asks:[],actions:{}};
+  const p = r.prev;
+  document.querySelectorAll(".wk").forEach(b => b.setAttribute("aria-pressed", b.dataset.week === r.week));
+  const rest = r.scope - r.done_pts;
+  const st = r.status_pts;
+  const seg = (k,col) => st[k] ? `<span style="width:${st[k]/r.scope*100}%;background:${col}" title="${k}: ${st[k]} pts"></span>` : "";
+  const actionFor = f => f.issue !== "-" ? (nr.actions[f.issue] || DEFAULT_ACTION[f.types[0]]) : (nr.actions[f.types[0]] || DEFAULT_ACTION[f.types[0]]);
+  const timelineCell = s => `<div class="tl">${s.timeline.map(t => `<span class="st ${esc(t.status)}" title="${esc(t.date)}">${fmt(t.date)} · ${esc(t.status)}</span>`).join("")}</div>`;
+
+  document.getElementById("report").innerHTML = `
+  <section aria-labelledby="h-sum">
+    <div class="status">
+      <span class="rag ${r.rag}">${r.rag}</span>
+      <div class="hl">${esc(nr.headline || "")}</div>
+      <div class="meta" style="flex-basis:100%">
+        <span><b>${esc(r.sprint)}</b> (${fmt(r.sprint_start)} – ${fmt(r.sprint_end)}), ${esc(r.kind)}</span>
+        <span>Snapshot <b>${fmt(r.week)}</b></span>
+        <span>GA <b>${fmt(r.release)}</b> · ${r.days_to_release} days away</span>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-exec">
+    <h2 id="h-exec"><span class="n">01</span>Executive summary</h2>
+    <ul class="sum">${nr.summary.map(s => `<li>${esc(s)}</li>`).join("")}</ul>
+    <p class="muted" style="margin:0;font-size:14px">Sprint goal: ${esc(r.sprint_goal)}</p>
+  </section>
+
+  <section aria-labelledby="h-health">
+    <h2 id="h-health"><span class="n">02</span>Sprint health</h2>
+    <div class="kpis">
+      <div class="kpi"><span class="l">Done</span><span class="v">${r.done_pts}<small> / ${r.scope} pts</small></span><span class="c">${r.done_pct}% done · ${r.elapsed_pct}% of sprint elapsed</span></div>
+      <div class="kpi"><span class="l">Committed at planning</span><span class="v">${r.committed}<small> pts</small></span><span class="c">${r.scope_added ? `+${r.scope_added} pts added mid-sprint` : "no mid-sprint adds"}</span></div>
+      <div class="kpi"><span class="l">Avg velocity (closed sprints)</span><span class="v">${r.avg_velocity ?? "–"}<small>${r.avg_velocity ? " pts" : ""}</small></span><span class="c">${r.avg_velocity ? `commit is ${(r.committed/r.avg_velocity).toFixed(1)}× velocity` : "first sprint"}</span></div>
+      <div class="kpi"><span class="l">Blocked items</span><span class="v">${r.blocked.length}</span>${delta(r.blocked.length, p && p.blocked, true)}</div>
+      <div class="kpi"><span class="l">Open carry-overs</span><span class="v">${r.carry_open.length}</span>${delta(r.carry_open.length, p && p.carry, true)}</div>
+      <div class="kpi"><span class="l">Open items</span><span class="v">${r.items_open}<small> of ${r.items_total}</small></span><span class="c">${rest} pts still open</span></div>
+    </div>
+    <div class="burn">
+      <div class="bar" role="img" aria-label="Points by status, with a marker at the share of the sprint elapsed">
+        ${seg("Done","var(--green)")}${seg("In Review","var(--amber)")}${seg("In Progress","var(--accent)")}${seg("To Do","var(--line)")}${seg("Blocked","var(--red)")}
+        <span class="marker" style="left:calc(${Math.min(r.elapsed_pct,100)}% - 1px)"></span>
+      </div>
+      <div class="legend">
+        ${["Done","In Review","In Progress","To Do","Blocked"].filter(k=>st[k]).map(k => `<span><i style="background:${{"Done":"var(--green)","In Review":"var(--amber)","In Progress":"var(--accent)","To Do":"var(--line)","Blocked":"var(--red)"}[k]}"></i>${k} ${st[k]} pts</span>`).join("")}
+        <span>▏ ${r.elapsed_pct}% of sprint elapsed</span>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-risk">
+    <h2 id="h-risk"><span class="n">03</span>Risk flags <span class="n">${r.flags.length}</span></h2>
+    ${r.flags.length ? `<div class="tbl"><table>
+      <thead><tr><th>Severity</th><th>Issue</th><th>Type</th><th>Detail</th><th>Recommended action</th><th>Owner</th></tr></thead>
+      <tbody>${r.flags.map(f => `<tr>
+        <td><span class="sev ${f.sev}">${f.sev}</span></td>
+        <td>${f.issue !== "-" ? `<span class="key">${f.issue}</span><br><span class="muted">${esc(f.summary)}</span>` : `<span class="muted">${esc(f.summary)}</span>`}</td>
+        <td>${f.types.map(t => `<span class="chip">${t}</span>`).join("")}</td>
+        <td>${f.details.map(esc).join("<br>")}</td>
+        <td>${esc(actionFor(f))}</td>
+        <td style="white-space:nowrap">${esc(f.owner)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="muted" style="margin:0">No risks flagged this week.</p>`}
+  </section>
+
+  <section aria-labelledby="h-block">
+    <h2 id="h-block"><span class="n">04</span>Blockers</h2>
+    ${r.blocked.length ? `<div class="tbl"><table>
+      <thead><tr><th>Issue</th><th>Owner</th><th>Days blocked</th><th>Waiting on</th></tr></thead>
+      <tbody>${r.blocked.map(b => `<tr>
+        <td><span class="key">${b.key}</span> ${b.new ? `<span class="chip new">new this week</span>` : ""}<br><span class="muted">${esc(b.summary)} · ${b.pts} pts · ${b.prio}</span></td>
+        <td style="white-space:nowrap">${esc(b.owner)}</td><td class="num"><b>${b.days}</b></td><td>${esc(b.note)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="muted" style="margin:0">Nothing is blocked.</p>`}
+    ${r.resolved_blockers.length ? `<p style="margin:0;font-size:14px"><b>Unblocked since last week:</b> ${r.resolved_blockers.map(k=>`<span class="key">${k}</span>`).join(", ")}</p>` : ""}
+  </section>
+
+  <section aria-labelledby="h-stuck">
+    <h2 id="h-stuck"><span class="n">05</span>Stuck or carried over</h2>
+    ${r.stuck.length ? `<div class="tbl"><table>
+      <thead><tr><th>Issue</th><th>Owner</th><th>Sprints</th><th>Weekly snapshots</th></tr></thead>
+      <tbody>${r.stuck.map(s => `<tr>
+        <td><span class="key">${s.key}</span><br><span class="muted">${esc(s.summary)} · ${s.pts} pts</span></td>
+        <td style="white-space:nowrap">${esc(s.owner)}</td><td class="num">${s.sprints.join(" → ")}</td><td>${timelineCell(s)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="muted" style="margin:0">No items are stuck or carried over.</p>`}
+  </section>
+
+  <section aria-labelledby="h-done">
+    <h2 id="h-done"><span class="n">06</span>Completed this week</h2>
+    ${r.completed.length ? `<ul class="sum">${r.completed.map(c => `<li><span class="key">${c.key}</span> ${esc(c.summary)} <span class="muted">· ${c.pts} pts · ${esc(c.owner)}${c.type==="Bug"?" · bug":""}</span></li>`).join("")}</ul>` : `<p class="muted" style="margin:0">Nothing closed this week.</p>`}
+  </section>
+
+  <section aria-labelledby="h-trend">
+    <h2 id="h-trend"><span class="n">07</span>Trends</h2>
+    <div class="charts">
+      <div class="chart"><h3>Velocity: committed vs done (pts)</h3>${velocityChart(r)}</div>
+      <div class="chart"><h3>Blockers and carry-overs by week</h3>${trendChart(r)}</div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-asks">
+    <h2 id="h-asks"><span class="n">08</span>Asks and decisions needed</h2>
+    <ol class="asks">${nr.asks.map(a => `<li>${esc(a)}</li>`).join("")}</ol>
+  </section>
+
+  <footer>Generated by the PM Sprint Status Agent from ${REPORTS.indexOf(r)+1} weekly Jira snapshot${REPORTS.indexOf(r)?"s":""} (${fmt(REPORTS[0].week)} – ${fmt(r.week)}). Source: jira_mock.md. Synthetic demo data; people, vendors and PR numbers are fictional.</footer>`;
+}
+
+const strip = document.getElementById("weeks");
+strip.innerHTML = REPORTS.map(r => `<button class="wk" type="button" id="wk-${r.week}" data-week="${r.week}" aria-pressed="false">
+  <span class="d">${fmt(r.week)}</span><span class="s"><span class="dot ${r.rag}"></span>${sprintShort(r.sprint)} · ${r.kind === "sprint close" ? "close" : "mid"}</span></button>`).join("");
+strip.addEventListener("click", e => {
+  const b = e.target.closest(".wk"); if (!b) return;
+  render(b.dataset.week);
+  try { history.replaceState(null, "", "#w" + b.dataset.week); } catch (_) {}
+});
+document.getElementById("projmeta").innerHTML = `<span>Project key <b>ATL</b></span><span>Team of 6 + PM</span><span>2-week sprints</span><span>Weekly snapshots, Fridays</span>`;
+const fromHash = (location.hash || "").replace(/^#w/, "");
+render(REPORTS.some(r => r.week === fromHash) ? fromHash : REPORTS[REPORTS.length-1].week);
+</script>
+
+</body>
+</html>

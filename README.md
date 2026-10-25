@@ -14,7 +14,8 @@ The data is **synthetic**: a demo project, "Atlas - Mobile Onboarding v2", with 
 | `pm_agent/narratives.json` | The agent's judgment for each week: headline, summary, recommended actions, asks |
 | `pm_agent/template.html` | Report page template with a week switcher |
 | `pm_agent/build.py` | Combines metrics + narratives into the final report page |
-| `atlas_status.html` | The built report. Open it in any browser |
+| `index.html` | The built report as a standalone page, served by GitHub Pages: https://mpahade.github.io/PMAgent/ |
+| `atlas_status.html` | The same report built for a Claude artifact |
 
 ## How it works
 
@@ -28,7 +29,7 @@ The data is **synthetic**: a demo project, "Atlas - Mobile Onboarding v2", with 
 ```bash
 python3 gen_jira_mock.py                       # optional: regenerate the mock data
 python3 pm_agent/analyze.py jira_mock.md reports.json
-python3 pm_agent/build.py pm_agent/template.html reports.json pm_agent/narratives.json atlas_status.html
+python3 pm_agent/build.py pm_agent/template.html reports.json pm_agent/narratives.json index.html --standalone
 ```
 
 Requires Python 3.9+, no extra packages. To report on a new week, append a snapshot to `jira_mock.md`, rerun `analyze.py`, add that week's entry to `narratives.json`, then rebuild.
