@@ -16,6 +16,8 @@ The data is **synthetic**: a demo project, "Atlas - Mobile Onboarding v2", with 
 | `pm_agent/build.py` | Combines metrics + narratives into the final report page |
 | `index.html` | The built report as a standalone page, served by GitHub Pages: https://mpahade.github.io/PMAgent/ |
 | `atlas_status.html` | The same report built for a Claude artifact |
+| `pm_agent_video.mp4` | 45-second project walkthrough with on-screen captions |
+| `voiceover_script.md` | Narration script for the video, with timings |
 
 ## How it works
 
