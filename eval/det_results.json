@@ -1,0 +1,126 @@
+{
+ "2026-09-18": [
+  {
+   "check": "done 2 of 34 (6%)",
+   "passed": true
+  },
+  {
+   "check": "'Five stories are in progress'",
+   "passed": false
+  },
+  {
+   "check": "no blockers",
+   "passed": true
+  }
+ ],
+ "2026-09-25": [
+  {
+   "check": "closed 18 of 34 (53%)",
+   "passed": true
+  },
+  {
+   "check": "carrying 16 pts, 3 items",
+   "passed": true
+  },
+  {
+   "check": "Sprint 41 planned at 50 pts (known on Sep 25?)",
+   "passed": false
+  },
+  {
+   "check": "ATL-108 referenced (not on board as of Sep 25)",
+   "passed": false
+  }
+ ],
+ "2026-10-02": [
+  {
+   "check": "5 of 50 (10%)",
+   "passed": true
+  },
+  {
+   "check": "2.8x of 18-pt avg",
+   "passed": true
+  },
+  {
+   "check": "two blockers, both new",
+   "passed": true
+  }
+ ],
+ "2026-10-09": [
+  {
+   "check": "27 pts, 54%",
+   "passed": true
+  },
+  {
+   "check": "best sprint so far",
+   "passed": true
+  },
+  {
+   "check": "ATL-108 blocked 9 days",
+   "passed": true
+  },
+  {
+   "check": "carrying 23 pts, 4 items",
+   "passed": true
+  }
+ ],
+ "2026-10-16": [
+  {
+   "check": "5 of 46 (11%) vs 50% elapsed",
+   "passed": true
+  },
+  {
+   "check": "22.5 avg velocity",
+   "passed": true
+  },
+  {
+   "check": "blockers 1 -> 3",
+   "passed": true
+  },
+  {
+   "check": "ATL-108 16 days",
+   "passed": true
+  },
+  {
+   "check": "ATL-112 in review 8 days",
+   "passed": true
+  },
+  {
+   "check": "ATL-115 not started 18 days",
+   "passed": true
+  }
+ ],
+ "2026-10-23": [
+  {
+   "check": "10 of 51 (20%)",
+   "passed": true
+  },
+  {
+   "check": "lowest of 3 sprints: 10 vs 18, 27",
+   "passed": true
+  },
+  {
+   "check": "41 open pts, ~2x 22.5 avg",
+   "passed": true
+  },
+  {
+   "check": "GA in 14 days",
+   "passed": true
+  },
+  {
+   "check": "ATL-108 23d, ATL-119 10d",
+   "passed": true
+  },
+  {
+   "check": "ATL-112 15d review, ATL-115 25d",
+   "passed": true
+  },
+  {
+   "check": "9 pts added mid-sprint",
+   "passed": true
+  },
+  {
+   "check": "Sprint 43 order fits the 23-pt cap (3+2+5+5+5+8)",
+   "passed": false
+  }
+ ]
+}

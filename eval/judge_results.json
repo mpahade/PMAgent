@@ -1,0 +1,378 @@
+[
+ {
+  "week": "2026-09-18",
+  "claims": [
+   {
+    "claim": "2 of 34 points done (6%) at the sprint midpoint",
+    "verdict": "SUPPORTED",
+    "evidence": "Snap1: only ATL-109 (2 pts) Done; scope 8+5+3+3+5+5+3+2=34; 2/34=5.9%; Sep 18 is day 5 of 10 (50%)."
+   },
+   {
+    "claim": "Five stories are in progress",
+    "verdict": "CONTRADICTED",
+    "evidence": "Snap1 In Progress: ATL-101, 102, 103, 105 = 4 items (ATL-104/106/107 are To Do)."
+   },
+   {
+    "claim": "[they] should land next week",
+    "verdict": "UNSUPPORTED",
+    "evidence": "Forecast with no basis; 3 items (11 pts) not started incl. ATL-106 (Omar, also holds ATL-105)."
+   },
+   {
+    "claim": "ATL-109 Android 12 rotation crash hotfixed in 1.14.2",
+    "verdict": "SUPPORTED",
+    "evidence": "Snap1 ATL-109 Done, note 'Hotfix released 1.14.2'."
+   },
+   {
+    "claim": "No blockers",
+    "verdict": "SUPPORTED",
+    "evidence": "No Blocked status in Snap1."
+   },
+   {
+    "claim": "ATL-101 Apple sign-in half needs an Apple entitlement that can take days to approve",
+    "verdict": "LOOKAHEAD",
+    "evidence": "Snap1 ATL-101 note is '-'; the Apple entitlement dependency first appears in Snap3 (2026-10-02)."
+   },
+   {
+    "claim": "Ask: Lena confirm entitlement request submitted by Mon Sep 21",
+    "verdict": "LOOKAHEAD",
+    "evidence": "Derived from the entitlement dependency not visible until Snap3."
+   }
+  ],
+  "missed_risks": [
+   "Omar Haddad holds 10 of 32 open pts: ATL-105 due Sep 23 in progress and ATL-106 (High, 5 pts, due Sep 25) not started.",
+   "11 pts (ATL-104, 106, 107) not started at the midpoint; ATL-102 design due Sep 22 still in progress and gates screens."
+  ],
+  "scores": {
+   "factual_accuracy": 3,
+   "grounding": 2,
+   "risk_coverage": 3,
+   "actionability": 3,
+   "rag_calibration": 4,
+   "internal_consistency": 4,
+   "clarity_concision": 4
+  },
+  "weighted_score": 3.1,
+  "verdict": "PASS_WITH_EDITS",
+  "top_fix": "Replace the lookahead Apple-entitlement risk with what the board shows (4 in progress, 11 pts not started, Omar's ATL-106 untouched) and correct 'five' to four."
+ },
+ {
+  "week": "2026-09-25",
+  "claims": [
+   {
+    "claim": "Sprint 40 closed at 53% (18 of 34 pts)",
+    "verdict": "SUPPORTED",
+    "evidence": "Done: 102(5)+103(3)+104(3)+105(5)+109(2)=18; 18/34=52.9%."
+   },
+   {
+    "claim": "Three items carry into Sprint 41",
+    "verdict": "SUPPORTED",
+    "evidence": "Notes on ATL-101, 106, 107: 'Carried to Sprint 41'."
+   },
+   {
+    "claim": "Delivered: design v2, both carousels, account API v2, Android crash fix",
+    "verdict": "SUPPORTED",
+    "evidence": "Snap2 Done items (ATL-109 was done Sep 17, still Sprint 40)."
+   },
+   {
+    "claim": "Carrying 16 pts: ATL-101 (Apple half), ATL-106 (in review), ATL-107 (not started)",
+    "verdict": "SUPPORTED",
+    "evidence": "8+5+3=16; notes 'Google done; Apple flow in progress', 'PR #188 open', 'Not started'."
+   },
+   {
+    "claim": "18-pt first-sprint velocity",
+    "verdict": "SUPPORTED",
+    "evidence": "Sprint 40 done = 18."
+   },
+   {
+    "claim": "Sprint 41 is planned at 50 pts",
+    "verdict": "LOOKAHEAD",
+    "evidence": "Sprint 41 planning was Mon Sep 28; the 50-pt commitment is not knowable on Sep 25."
+   },
+   {
+    "claim": "Ask: trim Sprint 41 from 50 pts to about 30 at planning",
+    "verdict": "LOOKAHEAD",
+    "evidence": "Depends on the 50-pt figure; also conflicts with the action 'size Sprint 41 against 18-20 pts'."
+   },
+   {
+    "claim": "ATL-108 KYC needs sandbox keys in Sprint 41; Procurement should start VeriID contract",
+    "verdict": "LOOKAHEAD",
+    "evidence": "ATL-108 and the VeriID/Procurement dependency are absent from Snap1-2; first visible in Snap3."
+   }
+  ],
+  "missed_risks": [
+   "ATL-101 is already past due (Sep 25) with Apple flow unfinished and no stated reason/ETA.",
+   "Release-level view absent: 42 days to GA with only 18 pts/sprint demonstrated."
+  ],
+  "scores": {
+   "factual_accuracy": 3,
+   "grounding": 1,
+   "risk_coverage": 3,
+   "actionability": 3,
+   "rag_calibration": 4,
+   "internal_consistency": 2,
+   "clarity_concision": 4
+  },
+  "weighted_score": 2.85,
+  "verdict": "FAIL",
+  "top_fix": "Remove the Sprint 41 50-pt and ATL-108/VeriID references (not knowable on Sep 25) and give one consistent sizing recommendation based on the 18-pt velocity."
+ },
+ {
+  "week": "2026-10-02",
+  "claims": [
+   {
+    "claim": "5 of 50 points done (10%) at the sprint midpoint",
+    "verdict": "SUPPORTED",
+    "evidence": "S41 items 8+5+3+8+5+5+5+3+3+5=50; only ATL-106 (5) Done."
+   },
+   {
+    "claim": "50-pt commitment is 2.8x the 18-pt average velocity",
+    "verdict": "SUPPORTED",
+    "evidence": "50/18=2.78."
+   },
+   {
+    "claim": "Two blockers",
+    "verdict": "SUPPORTED",
+    "evidence": "ATL-101 and ATL-108 Blocked in Snap3; neither blocked in Snap2."
+   },
+   {
+    "claim": "ATL-108 (Highest) blocked: no VeriID sandbox keys until Procurement signs contract",
+    "verdict": "SUPPORTED",
+    "evidence": "Snap3 ATL-108 note."
+   },
+   {
+    "claim": "ATL-108 is release-critical",
+    "verdict": "UNSUPPORTED",
+    "evidence": "Inferred from Highest priority; the explicit release-gate statement appears only in Snap6. Reasonable inference, minor."
+   },
+   {
+    "claim": "ATL-101 waiting on Apple approval of Sign in with Apple entitlement for prod bundle",
+    "verdict": "SUPPORTED",
+    "evidence": "Snap3 ATL-101 note."
+   },
+   {
+    "claim": "ATL-106 done; ATL-107 started after carry-over",
+    "verdict": "SUPPORTED",
+    "evidence": "ATL-106 Done Sep 30; ATL-107 In Progress since Sep 30."
+   }
+  ],
+  "missed_risks": [
+   "Lena Fischer: 16 of 16 open pts blocked - idle capacity/reassignment not addressed.",
+   "ATL-101 is 7 days past its Sep 25 due date (not stated)."
+  ],
+  "scores": {
+   "factual_accuracy": 5,
+   "grounding": 4,
+   "risk_coverage": 4,
+   "actionability": 4,
+   "rag_calibration": 4,
+   "internal_consistency": 5,
+   "clarity_concision": 4
+  },
+  "weighted_score": 4.3,
+  "verdict": "PASS",
+  "top_fix": "Add owners/dates to the over-commitment and burndown actions and address Lena's fully blocked load (reassign her to unblocked work)."
+ },
+ {
+  "week": "2026-10-09",
+  "claims": [
+   {
+    "claim": "Sprint 41 closed at 54% (27 pts)",
+    "verdict": "SUPPORTED",
+    "evidence": "Done: 101(8)+106(5)+107(3)+110(5)+113(3)+114(3)=27; 27/50=54%."
+   },
+   {
+    "claim": "Best sprint so far",
+    "verdict": "SUPPORTED",
+    "evidence": "27 > 18 (only two sprints)."
+   },
+   {
+    "claim": "Apple entitlement approved Oct 6",
+    "verdict": "SUPPORTED",
+    "evidence": "Snap4 ATL-101 note."
+   },
+   {
+    "claim": "ATL-108 blocked 9 days",
+    "verdict": "SUPPORTED",
+    "evidence": "Blocked since Sep 30 -> Oct 9 = 9 days."
+   },
+   {
+    "claim": "VeriID contract moved from Procurement to Legal for DPA review",
+    "verdict": "SUPPORTED",
+    "evidence": "Snap4 note 'Procurement: contract with Legal for DPA review'."
+   },
+   {
+    "claim": "Carrying 23 pts: ATL-108, 111, 112 (PR #219 in review), 115 (not started)",
+    "verdict": "SUPPORTED",
+    "evidence": "8+5+5+5=23; notes 'Carried to Sprint 42'."
+   },
+   {
+    "claim": "Ben at 50% on Payments regression from Oct 5",
+    "verdict": "SUPPORTED",
+    "evidence": "Snap4 ATL-115 note + team context (50% from Oct 5)."
+   }
+  ],
+  "missed_risks": [
+   "No release-level framing: 28 days to GA, ATL-115 (E2E, release-critical) not started for 11 days and Sprint 42 cap of 25 pts leaves ~2 pts for new release-hardening work.",
+   "ATL-111 already past due (Oct 9)."
+  ],
+  "scores": {
+   "factual_accuracy": 5,
+   "grounding": 5,
+   "risk_coverage": 4,
+   "actionability": 4,
+   "rag_calibration": 4,
+   "internal_consistency": 4,
+   "clarity_concision": 4
+  },
+  "weighted_score": 4.4,
+  "verdict": "PASS",
+  "top_fix": "State what the 25-pt Sprint 42 cap (23 pts of carry-over) means for the Nov 6 GA scope and give the Legal ask a deadline."
+ },
+ {
+  "week": "2026-10-16",
+  "claims": [
+   {
+    "claim": "5 of 46 pts done (11%) vs 50% elapsed",
+    "verdict": "SUPPORTED",
+    "evidence": "Planned 42 (8+5+5+5+8+5+3+3) + ATL-120(2)+ATL-122(2)=46; only ATL-111 (5) Done; 10.9%."
+   },
+   {
+    "claim": "42 committed against 22.5-pt average",
+    "verdict": "SUPPORTED",
+    "evidence": "Sprint table 42; (18+27)/2=22.5."
+   },
+   {
+    "claim": "Blockers went from 1 to 3",
+    "verdict": "SUPPORTED",
+    "evidence": "Snap4: ATL-108 only; Snap5: 108, 118, 119."
+   },
+   {
+    "claim": "ATL-108 blocked 16 days (Legal DPA)",
+    "verdict": "SUPPORTED",
+    "evidence": "Sep 30 -> Oct 16 = 16."
+   },
+   {
+    "claim": "ATL-119 Legal copy approval; ATL-118 translation vendor",
+    "verdict": "SUPPORTED",
+    "evidence": "Snap5 notes."
+   },
+   {
+    "claim": "PR #219 no review in 8 days",
+    "verdict": "SUPPORTED",
+    "evidence": "In Review since Oct 8; note 'still unreviewed'."
+   },
+   {
+    "claim": "ATL-115 not started after 18 days",
+    "verdict": "SUPPORTED",
+    "evidence": "To Do since Sep 28 -> 18 days."
+   },
+   {
+    "claim": "INC-342 pulled Omar onto ATL-120",
+    "verdict": "SUPPORTED",
+    "evidence": "ATL-120 Omar, added mid-sprint for INC-342."
+   },
+   {
+    "claim": "...slowing magic-link login (ATL-116)",
+    "verdict": "UNSUPPORTED",
+    "evidence": "Plausible inference (same owner) but the slowdown is only stated in Snap6 ('slowed by ATL-120')."
+   }
+  ],
+  "missed_risks": [
+   "ATL-122 (feature-flag rollout config) is a release prerequisite for the staged flag rollout, yet the report proposes deferring it while other actions (ATL-119 placeholder copy) rely on the flag.",
+   "ATL-108 hits its due date today (Oct 16) and GA is 21 days out - no release-date impact stated."
+  ],
+  "scores": {
+   "factual_accuracy": 5,
+   "grounding": 4,
+   "risk_coverage": 4,
+   "actionability": 4,
+   "rag_calibration": 5,
+   "internal_consistency": 4,
+   "clarity_concision": 4
+  },
+  "weighted_score": 4.35,
+  "verdict": "PASS",
+  "top_fix": "Do not defer ATL-122 - the flag-based fallbacks depend on it - and add an explicit GA-impact line (21 days left)."
+ },
+ {
+  "week": "2026-10-23",
+  "claims": [
+   {
+    "claim": "Sprint 42 closed at 20% (10 of 51 pts)",
+    "verdict": "SUPPORTED",
+    "evidence": "Scope 42+9=51; Done 111(5)+118(3)+120(2)=10; 19.6%."
+   },
+   {
+    "claim": "10 pts vs 18 and 27 before",
+    "verdict": "SUPPORTED",
+    "evidence": "Velocity S40=18, S41=27."
+   },
+   {
+    "claim": "41 open pts, nearly twice the 22.5-pt average",
+    "verdict": "SUPPORTED",
+    "evidence": "51-10=41; 41/22.5=1.82. Note: the 3-sprint average incl. S42 is 18.3 (2.2x), so 22.5 understates the gap."
+   },
+   {
+    "claim": "GA in 14 days",
+    "verdict": "SUPPORTED",
+    "evidence": "Oct 23 -> Nov 6."
+   },
+   {
+    "claim": "ATL-108 blocked 23 days; ATL-119 blocked 10 days; Legal gave no date",
+    "verdict": "SUPPORTED",
+    "evidence": "Sep 30->Oct 23=23; Oct 13->Oct 23=10; notes 'no ETA', 'no date given'."
+   },
+   {
+    "claim": "Both release gates waiting on the same Legal review",
+    "verdict": "SUPPORTED",
+    "evidence": "ATL-119 note: 'Legal reviewing copy together with VeriID DPA'. ('Both' omits ATL-115, which Snap6 also calls a release gate.)"
+   },
+   {
+    "claim": "PR #219 in review 15 days; second approver out until Oct 28",
+    "verdict": "SUPPORTED",
+    "evidence": "In Review since Oct 8; note '1 of 2 approvals; on leave until Oct 28'."
+   },
+   {
+    "claim": "ATL-115 untouched after 25 days",
+    "verdict": "SUPPORTED",
+    "evidence": "To Do since Sep 28."
+   },
+   {
+    "claim": "9 pts added mid-sprint, mostly bugs",
+    "verdict": "SUPPORTED",
+    "evidence": "ATL-120(2)+122(2)+121(3)+123(2)=9; 7 of 9 pts are bugs."
+   },
+   {
+    "claim": "ATL-121 Highest, ~4% of iOS signups on staging, in progress",
+    "verdict": "SUPPORTED",
+    "evidence": "Snap6 ATL-121."
+   },
+   {
+    "claim": "ATL-118 done; INC-342 hotfix shipped",
+    "verdict": "SUPPORTED",
+    "evidence": "ATL-118 Done Oct 21; ATL-120 Done, hotfix 1.15.1."
+   },
+   {
+    "claim": "Commit Sprint 43 at 23 pts or less; order ATL-121, 122, 115, 112, 117, 116 (plus 4-pt buffer)",
+    "verdict": "CONTRADICTED",
+    "evidence": "Listed items sum 3+2+5+5+5+8=28 > 23 (and the 4-pt buffer leaves only 19); ATL-119 consent gate is missing from the order."
+   }
+  ],
+  "missed_risks": [
+   "ATL-123 (profile photo upload hang, found in beta) not mentioned.",
+   "Average velocity not updated after Sprint 42 (18.3 incl. S42), which would tighten the 23-pt cap."
+  ],
+  "scores": {
+   "factual_accuracy": 3,
+   "grounding": 5,
+   "risk_coverage": 5,
+   "actionability": 5,
+   "rag_calibration": 5,
+   "internal_consistency": 2,
+   "clarity_concision": 4
+  },
+  "weighted_score": 4.25,
+  "verdict": "PASS_WITH_EDITS",
+  "top_fix": "Make the Sprint 43 plan add up: cut the ordered list to fit the cap after the buffer (or raise the cap explicitly), slot ATL-119 in, and use the updated 18.3-pt average."
+ }
+]

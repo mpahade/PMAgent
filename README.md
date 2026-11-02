@@ -20,6 +20,12 @@ The data is **synthetic**: a demo project, "Atlas - Mobile Onboarding v2", with 
 | `atlas_status.html` | The same report built for a Claude artifact |
 | `pm_agent_video.mp4` | 45-second project walkthrough with on-screen captions |
 | `voiceover_script.md` | Narration script for the video, with timings |
+| `eval/EVALUATION.md` | LLM-as-judge evaluation of the six weekly reports: scores, errors found, missed risks, fixes |
+| `eval/judge_prompt.md` | Judge rubric (7 weighted criteria) and JSON output schema, reusable in n8n |
+| `eval/ground_truth.py`, `eval/det_checks.py` | Recompute ground truth and check every number in the narratives (24/28 pass) |
+| `eval/judge_results.json`, `eval/det_results.json` | Results of this evaluation run |
+| `docs/n8n_build_notes.md` | n8n workflows, agent, data tables and go-live steps |
+| `docs/sample_weekly_status_report.md` | Sample report from the n8n pipeline (Phoenix demo project) |
 
 ## How it works
 
