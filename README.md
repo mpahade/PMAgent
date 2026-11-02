@@ -24,6 +24,8 @@ The data is **synthetic**: a demo project, "Atlas - Mobile Onboarding v2", with 
 | `eval/judge_prompt.md` | Judge rubric (7 weighted criteria) and JSON output schema, reusable in n8n |
 | `eval/ground_truth.py`, `eval/det_checks.py` | Recompute ground truth and check every number in the narratives (24/28 pass) |
 | `eval/judge_results.json`, `eval/det_results.json` | Results of this evaluation run |
+| `eval/eval_explainer.mp4` | 30-second video explaining the eval method, with voiceover |
+| `eval/video/` | Scripts that render the explainer (`render.py`) and its Kokoro voiceover (`voiceover.py`) |
 | `docs/sample_weekly_status_report.md` | Sample report from the n8n pipeline (Phoenix demo project) |
 
 ## How it works
